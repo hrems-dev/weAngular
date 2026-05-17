@@ -1,0 +1,45 @@
+.login-card {
+  width: 100%;
+  max-width: 420px;
+}
+
+.login-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem 1rem 0;
+  gap: 0.5rem;
+
+  .login-brand {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--p-primary-color);
+  }
+
+  p {
+    color: var(--p-text-muted-color);
+    font-size: 0.9rem;
+  }
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding: 1rem 0;
+
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+
+    label {
+      font-weight: 500;
+      font-size: 0.9rem;
+    }
+
+    input, p-password {
+      width: 100%;
+    }
+  }
+}

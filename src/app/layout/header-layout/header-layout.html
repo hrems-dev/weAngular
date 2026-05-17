@@ -1,0 +1,18 @@
+<p-toolbar>
+  <ng-template #start>
+    <p-button
+      icon="pi pi-bars"
+      [rounded]="true"
+      [text]="true"
+      severity="secondary"
+      (onClick)="layoutState.toggleSidebar()"
+    />
+    <span class="app-brand">Sales App</span>
+  </ng-template>
+  <ng-template #end>
+    <div class="header-actions">
+      <p-button icon="pi pi-bell" [rounded]="true" [text]="true" severity="secondary" />
+      <p-avatar icon="pi pi-user" shape="circle" />
+    </div>
+  </ng-template>
+</p-toolbar>

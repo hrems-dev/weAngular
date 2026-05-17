@@ -1,0 +1,8 @@
+.sidebar {
+  width: 260px;
+  min-height: 100%;
+  background-color: var(--p-surface-card);
+  border-right: 1px solid var(--p-surface-border);
+  padding: 1rem 0.5rem;
+  overflow-y: auto;
+}

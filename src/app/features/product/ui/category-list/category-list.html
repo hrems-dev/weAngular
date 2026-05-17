@@ -1,1 +1,104 @@
-<p>category-list works!</p>
+<p-toast/>
+
+<div class="p-4">
+  <div class="flex justify-between items-center mb-4">
+    <h2 class="text-2xl font-bold">Categorías</h2>
+    <div class="flex gap-2">
+      <input pInputText placeholder="Buscar..." (input)="onSearch($event)"/>
+      <p-button label="Nueva Categoría" icon="pi pi-plus" (onClick)="openCreate()"/>
+    </div>
+  </div>
+
+  <p-table
+    [value]="$categories()"
+    [totalRecords]="$totalRecords()"
+    [lazy]="true"
+    [paginator]="true"
+    [rows]="size"
+    (onPage)="onPageChange($event)"
+    stripedRows
+  >
+    <ng-template #header>
+      <tr>
+        <th>Nombre</th>
+        <th>Descripción</th>
+        <th>Activo</th>
+        <th>Acciones</th>
+      </tr>
+    </ng-template>
+    <ng-template #body let-category>
+      <tr>
+        <td>{{ category.name }}</td>
+        <td>{{ category.description }}</td>
+        <td>
+          <i
+            class="pi"
+            [class.pi-check-circle]="category.isActive"
+            [class.pi-times-circle]="!category.isActive"
+          ></i>
+        </td>
+        <td>
+          <p-button icon="pi pi-pencil" [rounded]="true" [text]="true" (onClick)="openEdit(category)"/>
+          <p-button icon="pi pi-trash" [rounded]="true" [text]="true" severity="danger" (onClick)="delete(category)"/>
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template #empty>
+      <tr>
+        <td colspan="4" class="text-center p-4">No hay categorías registradas</td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
+
+<p-dialog
+  [visible]="$dialogVisible()"
+  (visibleChange)="$dialogVisible.set($event)"
+  [header]="$isEditing() ? 'Editar Categoría' : 'Nueva Categoría'"
+  [modal]="true"
+  [style]="{ width: '480px' }"
+>
+  <form [formGroup]="form">
+    <div class="flex flex-column gap-3 pt-2">
+
+      <div class="flex flex-column gap-1">
+        <label for="name" class="font-semibold">Nombre</label>
+        <input pInputText id="name" formControlName="name" placeholder="Ingrese el nombre"/>
+        @if (form.get('name')?.invalid && form.get('name')?.touched) {
+          <small class="p-error">El nombre es requerido</small>
+        }
+      </div>
+
+      <div class="flex flex-column gap-1">
+        <label for="description" class="font-semibold">Descripción</label>
+        <textarea pTextarea id="description" formControlName="description" placeholder="Ingrese una descripción" rows="3"></textarea>
+        @if (form.get('description')?.invalid && form.get('description')?.touched) {
+          <small class="p-error">La descripción es requerida</small>
+        }
+      </div>
+
+      <div class="flex align-items-center gap-2">
+        <p-toggleswitch formControlName="isActive"/>
+        <label class="font-semibold">Activo</label>
+      </div>
+
+    </div>
+  </form>
+
+  <ng-template #footer>
+    <div class="flex justify-end gap-2 pt-2">
+      <p-button
+        label="Cancelar"
+        [text]="true"
+        severity="secondary"
+        (onClick)="$dialogVisible.set(false)"
+      />
+      <p-button
+        label="Guardar"
+        icon="pi pi-save"
+        (onClick)="submit()"
+        [disabled]="form.invalid"
+      />
+    </div>
+  </ng-template>
+</p-dialog>

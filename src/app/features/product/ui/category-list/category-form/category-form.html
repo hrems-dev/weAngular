@@ -1,0 +1,43 @@
+
+
+<form [formGroup]="form">
+  <div class="flex flex-column gap-3 pt-2">
+
+    <div class="flex flex-column gap-1">
+      <label for="name" class="font-semibold">Nombre</label>
+      <input pInputText id="name" formControlName="name" placeholder="Ingrese el nombre"/>
+      @if (form.get('name')?.invalid && form.get('name')?.touched) {
+        <small class="p-error">El nombre es requerido</small>
+      }
+    </div>
+
+    <div class="flex flex-column gap-1">
+      <label for="description" class="font-semibold">Descripción</label>
+      <textarea pTextarea id="description" formControlName="description" placeholder="Ingrese una descripción" rows="3"></textarea>
+      @if (form.get('description')?.invalid && form.get('description')?.touched) {
+        <small class="p-error">La descripción es requerida</small>
+      }
+    </div>
+
+    <div class="flex align-items-center gap-2">
+      <p-toggleswitch formControlName="isActive"/>
+      <label class="font-semibold">Activo</label>
+    </div>
+
+    <div class="flex justify-content-end gap-2 pt-2">
+      <p-button
+        label="Cancelar"
+        [text]="true"
+        severity="secondary"
+        (onClick)="$cancelled.emit()"
+      />
+      <p-button
+        label="Guardar"
+        icon="pi pi-save"
+        (onClick)="submit()"
+        [disabled]="form.invalid"
+      />
+    </div>
+
+  </div>
+</form>

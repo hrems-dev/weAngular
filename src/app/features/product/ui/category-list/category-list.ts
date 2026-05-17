@@ -1,31 +1,27 @@
 import { Component, inject, OnInit, OnDestroy, signal } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
-import { TextareaModule } from 'primeng/textarea';
-import { ToggleSwitchModule } from 'primeng/toggleswitch';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { CommonModule } from '@angular/common';
 import { CategoryApi } from '../../data/category-api';
 import { CategoryResponse } from '../../data/category.models';
+import { CategoryForm } from './category-form/category-form';
 
 @Component({
   selector: 'app-category-list',
   imports: [
     CommonModule,
-    ReactiveFormsModule,
     TableModule,
     ButtonModule,
     DialogModule,
     InputTextModule,
-    TextareaModule,
-    ToggleSwitchModule,
     ToastModule,
+    CategoryForm,
   ],
   providers: [MessageService],
   templateUrl: './category-list.html',
@@ -33,13 +29,11 @@ import { CategoryResponse } from '../../data/category.models';
 })
 export class CategoryList implements OnInit, OnDestroy {
   private categoryApi = inject(CategoryApi);
-  private fb = inject(FormBuilder);
   private messageService = inject(MessageService);
 
   $categories = signal<CategoryResponse[]>([]);
   $totalRecords = signal(0);
   $dialogVisible = signal(false);
-  $isEditing = signal(false);
   $selectedCategory = signal<CategoryResponse | null>(null);
 
   page = 0;
@@ -48,12 +42,6 @@ export class CategoryList implements OnInit, OnDestroy {
 
   private searchSubject = new Subject<string>();
   private destroy$ = new Subject<void>();
-
-  form: FormGroup = this.fb.group({
-    name: ['', Validators.required],
-    description: ['', Validators.required],
-    isActive: [true],
-  });
 
   ngOnInit() {
     this.searchSubject
@@ -100,64 +88,24 @@ export class CategoryList implements OnInit, OnDestroy {
   }
 
   openCreate() {
-    this.$isEditing.set(false);
-    this.$selectedCategory.set(null);
-    this.form.reset({ isActive: true });
-    this.$dialogVisible.set(true);
+    this.$selectedCategory.set(undefined as any);
+    setTimeout(() => {
+      this.$selectedCategory.set(null);
+      this.$dialogVisible.set(true);
+    });
   }
-
   openEdit(category: CategoryResponse) {
-    this.$isEditing.set(true);
     this.$selectedCategory.set(category);
-    this.form.patchValue(category);
     this.$dialogVisible.set(true);
   }
 
-  submit() {
-    if (this.form.invalid) return;
+  onSaved() {
+    this.$dialogVisible.set(false);
+    this.loadCategories();
+  }
 
-    const payload = this.form.value;
-    const selected = this.$selectedCategory();
-
-    if (this.$isEditing() && selected) {
-      this.categoryApi.update(selected.id, payload).subscribe({
-        next: () => {
-          this.messageService.add({
-            severity: 'success',
-            summary: 'Actualizado',
-            detail: 'Categoría actualizada correctamente',
-          });
-          this.$dialogVisible.set(false);
-          this.loadCategories();
-        },
-        error: () => {
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Error',
-            detail: 'No se pudo actualizar la categoría',
-          });
-        },
-      });
-    } else {
-      this.categoryApi.save(payload).subscribe({
-        next: () => {
-          this.messageService.add({
-            severity: 'success',
-            summary: 'Creado',
-            detail: 'Categoría creada correctamente',
-          });
-          this.$dialogVisible.set(false);
-          this.loadCategories();
-        },
-        error: () => {
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Error',
-            detail: 'No se pudo crear la categoría',
-          });
-        },
-      });
-    }
+  onCancelled() {
+    this.$dialogVisible.set(false);
   }
 
   delete(category: CategoryResponse) {

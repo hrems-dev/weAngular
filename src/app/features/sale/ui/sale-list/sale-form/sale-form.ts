@@ -72,7 +72,7 @@ export class SaleForm implements OnInit {
       next: (sale: SaleResponse) => {
         this.form.patchValue({
           client_id: { id: sale.client_id, name: sale.clientName },
-          sale_date: sale.sale_date,
+          sale_date: sale.sale_date ? new Date(sale.sale_date) : null,
           total: sale.total,
         });
         if (sale.items?.length) {
@@ -96,6 +96,7 @@ export class SaleForm implements OnInit {
     const val = this.form.getRawValue();
     const payload = {
       ...val,
+      sale_date: val.sale_date instanceof Date ? val.sale_date.toISOString() : val.sale_date,
       client_id: val.client_id?.id || val.client_id,
       items: this.$lines().map((l) => ({
         product_id: l.product_id,

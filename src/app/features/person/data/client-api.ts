@@ -12,23 +12,27 @@ export class ClientApi {
   getAll(page: number = 0, size: number = 10, q?: string) {
     const params: any = { page, size };
     if (q) params['q'] = q;
-    return this.http.get<PaginationModel<ClientResponse[]>>('http://localhost:8080/api/clients', {
-      params,
-    });
+    return this.http.get<PaginationModel<ClientResponse[]>>(
+      'http://172.22.12.50:8080/api/clients',
+      {
+        params,
+      },
+    );
   }
 
   getById(id: string) {
-    return this.http.get<ClientResponse>('http://localhost:8080/api/clients/' + id);
+    return this.http.get<ClientResponse>('http://172.22.12.50:8080/api/clients/' + id);
   }
 
   save(client: ClientRequest) {
-    return this.http.post<ClientResponse>('http://localhost:8080/api/clients', client);
+    return this.http.post<ClientResponse>('http://172.22.12.50:8080/api/clients', client);
   }
 
   update(id: string, client: ClientRequest) {
-    return this.http.put<ClientResponse>('http://localhost:8080/api/clients/' + id, client);
+    return this.http.put<ClientResponse>('http://172.22.12.50:8080/api/clients/' + id, client);
   }
 
   delete(id: string) {
-    return this.http.delete<void>('http://localhost:8080/api/clients/' + id);
+    return this.http.delete<void>('http://172.22.12.50:8080/api/clients/' + id);
   }
+}

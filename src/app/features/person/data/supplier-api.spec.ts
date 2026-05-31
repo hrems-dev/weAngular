@@ -24,7 +24,7 @@ describe('SupplierApi', () => {
 
     const req = httpMock.expectOne(
       (request) =>
-        request.url === 'http://localhost:8080/api/suppliers' && request.method === 'GET',
+        request.url === 'http://172.22.12.50:8080/api/suppliers' && request.method === 'GET',
     );
 
     expect(req.request.params.get('page')).toBe('2');
@@ -44,7 +44,7 @@ describe('SupplierApi', () => {
 
     service.save(payload).subscribe();
 
-    const req = httpMock.expectOne('http://localhost:8080/api/suppliers');
+    const req = httpMock.expectOne('http://172.22.12.50:8080/api/suppliers');
     expect(req.request.method).toBe('POST');
     expect(req.request.body).toEqual(payload);
     req.flush({ ...payload, id: '1' });

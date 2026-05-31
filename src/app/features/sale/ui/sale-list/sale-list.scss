@@ -1,0 +1,16 @@
+:host {
+  display: block;
+}
+
+.report-cards,
+.card-container {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.card {
+  background: #ffffff;
+  border-radius: 0.5rem;
+  padding: 1rem;
+}

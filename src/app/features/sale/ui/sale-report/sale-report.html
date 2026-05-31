@@ -1,1 +1,62 @@
-<p>sale-report works!</p>
+<p-toast></p-toast>
+
+<div class="report-container">
+  <div class="header">
+    <h1>Reporte de Ventas</h1>
+    <p class="text-secondary">Resumen analítico de transacciones realizadas</p>
+  </div>
+
+  <div class="grid summary-cards">
+    <div class="col-12 md:col-4">
+      <p-card header="Ventas Totales">
+        <h2 class="text-primary">
+          {{ $totalSales() | currency: 'PEN' : 'symbol' : '1.2-2' : 'es-PE' }}
+        </h2>
+        <small>Ingresos acumulados</small>
+      </p-card>
+    </div>
+    <div class="col-12 md:col-4">
+      <p-card header="Total de Pedidos">
+        <h2 class="text-primary">{{ $totalOrders() | number: '1.0-0' }}</h2>
+        <small>Cantidad de transacciones</small>
+      </p-card>
+    </div>
+    <div class="col-12 md:col-4">
+      <p-card header="Ticket Promedio">
+        <h2 class="text-primary">
+          {{ $averageOrder() | currency: 'PEN' : 'symbol' : '1.2-2' : 'es-PE' }}
+        </h2>
+        <small>Promedio por venta</small>
+      </p-card>
+    </div>
+  </div>
+
+  <div class="report-table mt-4">
+    <p-card>
+      <p-table
+        [value]="$report()"
+        [paginator]="true"
+        [rows]="10"
+        [responsiveLayout]="'scroll'"
+        styleClass="p-datatable-striped"
+      >
+        <ng-template pTemplate="header">
+          <tr>
+            <th>Fecha / Periodo</th>
+            <th class="text-right">Monto de Ventas</th>
+            <th class="text-right">Cantidad de Pedidos</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-item>
+          <tr>
+            <td>{{ item.date }}</td>
+            <td class="text-right font-bold">
+              {{ item.totalSales | currency: 'PEN' : 'symbol' : '1.2-2' : 'es-PE' }}
+            </td>
+            <td class="text-right">{{ item.totalOrders }}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </p-card>
+  </div>
+</div>

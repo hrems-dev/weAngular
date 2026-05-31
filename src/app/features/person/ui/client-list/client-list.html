@@ -1,1 +1,65 @@
-<p>client-list works!</p>
+<p-toast />
+
+<div class="p-4">
+  <div class="flex justify-content-between align-items-center mb-4">
+    <h2 class="text-2xl font-bold">Clientes</h2>
+    <div class="flex gap-2">
+      <input pInputText placeholder="Buscar..." (input)="onSearch($event)" />
+      <p-button label="Nuevo Cliente" icon="pi pi-plus" (onClick)="goToCreate()" />
+    </div>
+  </div>
+
+  <p-table
+    [value]="$clients()"
+    [totalRecords]="$totalRecords()"
+    [lazy]="true"
+    [paginator]="true"
+    [rows]="size"
+    (onPage)="onPageChange($event)"
+    stripedRows
+  >
+    <ng-template #header>
+      <tr>
+        <th>Nombre</th>
+        <th>Email</th>
+        <th>Teléfono</th>
+        <th>Activo</th>
+        <th>Acciones</th>
+      </tr>
+    </ng-template>
+    <ng-template #body let-client>
+      <tr>
+        <td>{{ client.name }}</td>
+        <td>{{ client.email }}</td>
+        <td>{{ client.phone }}</td>
+        <td>
+          <i
+            class="pi"
+            [class.pi-check-circle]="client.isActive"
+            [class.pi-times-circle]="!client.isActive"
+          ></i>
+        </td>
+        <td>
+          <p-button
+            icon="pi pi-pencil"
+            [rounded]="true"
+            [text]="true"
+            (onClick)="goToEdit(client)"
+          />
+          <p-button
+            icon="pi pi-trash"
+            [rounded]="true"
+            [text]="true"
+            severity="danger"
+            (onClick)="delete(client)"
+          />
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template #empty>
+      <tr>
+        <td colspan="5" class="text-center p-4">No hay clientes registrados</td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

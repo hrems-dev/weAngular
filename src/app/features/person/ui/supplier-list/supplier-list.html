@@ -1,1 +1,67 @@
-<p>supplier-list works!</p>
+<p-toast />
+
+<div class="p-4">
+  <div class="flex justify-content-between align-items-center mb-4">
+    <h2 class="text-2xl font-bold">Proveedores</h2>
+    <div class="flex gap-2">
+      <input pInputText placeholder="Buscar..." (input)="onSearch($event)" />
+      <p-button label="Nuevo Proveedor" icon="pi pi-plus" (onClick)="goToCreate()" />
+    </div>
+  </div>
+
+  <p-table
+    [value]="$suppliers()"
+    [totalRecords]="$totalRecords()"
+    [lazy]="true"
+    [paginator]="true"
+    [rows]="size"
+    (onPage)="onPageChange($event)"
+    stripedRows
+  >
+    <ng-template #header>
+      <tr>
+        <th>Nombre</th>
+        <th>Contacto</th>
+        <th>Email</th>
+        <th>Teléfono</th>
+        <th>Activo</th>
+        <th>Acciones</th>
+      </tr>
+    </ng-template>
+    <ng-template #body let-supplier>
+      <tr>
+        <td>{{ supplier.name }}</td>
+        <td>{{ supplier.contactName }}</td>
+        <td>{{ supplier.email }}</td>
+        <td>{{ supplier.phone }}</td>
+        <td>
+          <i
+            class="pi"
+            [class.pi-check-circle]="supplier.isActive"
+            [class.pi-times-circle]="!supplier.isActive"
+          ></i>
+        </td>
+        <td>
+          <p-button
+            icon="pi pi-pencil"
+            [rounded]="true"
+            [text]="true"
+            (onClick)="goToEdit(supplier)"
+          />
+          <p-button
+            icon="pi pi-trash"
+            [rounded]="true"
+            [text]="true"
+            severity="danger"
+            (onClick)="delete(supplier)"
+          />
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template #empty>
+      <tr>
+        <td colspan="6" class="text-center p-4">No hay proveedores registrados</td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

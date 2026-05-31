@@ -12,28 +12,28 @@ export class SaleApi {
   getAll(page: number = 0, size: number = 10, q?: string) {
     const params: any = { page, size };
     if (q) params['q'] = q;
-    return this.http.get<PaginationModel<SaleResponse[]>>('http://localhost:8080/api/sales', {
+    return this.http.get<PaginationModel<SaleResponse[]>>('http://172.22.12.50:8080/api/sales', {
       params,
     });
   }
 
   getById(id: string) {
-    return this.http.get<SaleResponse>('http://localhost:8080/api/sales/' + id);
+    return this.http.get<SaleResponse>('http://172.22.12.50:8080/api/sales/' + id);
   }
 
   save(sale: SaleRequest) {
-    return this.http.post<SaleResponse>('http://localhost:8080/api/sales', sale);
+    return this.http.post<SaleResponse>('http://172.22.12.50:8080/api/sales', sale);
   }
 
   update(id: string, sale: SaleRequest) {
-    return this.http.put<SaleResponse>('http://localhost:8080/api/sales/' + id, sale);
+    return this.http.put<SaleResponse>('http://172.22.12.50:8080/api/sales/' + id, sale);
   }
 
   delete(id: string) {
-    return this.http.delete<void>('http://localhost:8080/api/sales/' + id);
+    return this.http.delete<void>('http://172.22.12.50:8080/api/sales/' + id);
   }
 
   getReport() {
-    return this.http.get<SaleReportResponse[]>('http://localhost:8080/api/sales/report');
+    return this.http.get<SaleReportResponse[]>('http://172.22.12.50:8080/api/sales/report');
   }
 }
